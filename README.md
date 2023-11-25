@@ -30,7 +30,7 @@ func main() {
 	m.Put(1, "a")                   // 1->a, 2->b
 	_, _ = m.Get(2)                 // b, true
 	_, _ = m.Get(3)                 // "", false
-	_ = m.Values()                  // []string{"b", "a"}
+	_ = m.Values()                  // []string{"a", "b"}
 	_ = m.Keys()                    // []int{1, 2}
 	m.Remove(1)                     // 2->b
 	m.Clear()                       // empty
