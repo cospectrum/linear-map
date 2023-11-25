@@ -1,0 +1,14 @@
+run:
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    # linter
+    - revive
+
+    # fmt
+    - gofmt
+    - goimports
+
+    - unconvert
