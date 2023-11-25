@@ -1,13 +1,22 @@
 # LinearMap
+[![github]](https://github.com/cospectrum/linear-map)
+[![goref]](https://pkg.go.dev/github.com/cospectrum/linear-map)
+
+[github]: https://img.shields.io/badge/github-cospectrum/linear--map-8da0cb?logo=github
+[goref]: https://pkg.go.dev/badge/github.com/cospectrum/linear-map
 
 A map implemented by searching linearly in a slice of (key, value).
+
 Intended for use with a small number of elements.
 
-## Usage
+## Install
 
 ```sh
-go get "github.com/cospectrum/linear-map"
+go get github.com/cospectrum/linear-map
 ```
+Requires Go version 1.18 or greater.
+
+## Usage
 
 ```go
 package main
@@ -33,6 +42,7 @@ func main() {
 ## Benchmarks
 
 Benchmarks are performed on arm64 with Key=int, Value=struct{}.
+
 The lower is better
 
 Length: 10
