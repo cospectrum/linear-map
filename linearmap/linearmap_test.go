@@ -194,116 +194,106 @@ func sameElements(a []interface{}, b []interface{}) bool {
 	return true
 }
 
-func benchmarkGet(b *testing.B, m *LinearMap[int, struct{}], size int) {
-	for i := 0; i < b.N; i++ {
-		for n := 0; n < size; n++ {
-			m.Get(n)
+func benchmark(b *testing.B, name string, bench func()) {
+	b.Run(name, func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			bench()
 		}
-	}
+	})
 }
 
-func benchmarkPut(b *testing.B, m *LinearMap[int, struct{}], size int) {
-	for i := 0; i < b.N; i++ {
-		for n := 0; n < size; n++ {
-			m.Put(n, struct{}{})
+var sizes = [3]int{10, 20, 30}
+
+func getKey(n int) int {
+	return n
+}
+
+func getPair(n int) (int, struct{}) {
+	key := getKey(n)
+	return key, struct{}{}
+}
+
+func BenchmarkGet(b *testing.B) {
+	for _, size := range sizes {
+		lm := newLinearMap(size, getPair)
+		benchLinear := func() {
+			for n := 0; n < size; n++ {
+				lm.Get(getKey(n))
+			}
 		}
-	}
-}
+		name := fmt.Sprintf("LinearMap_size_%v__", size)
+		benchmark(b, name, benchLinear)
 
-func benchmarkRemove(b *testing.B, m *LinearMap[int, struct{}], size int) {
-	for i := 0; i < b.N; i++ {
-		for n := 0; n < size; n++ {
-			m.Remove(n)
+		m := newMap(size, getPair)
+		bench := func() {
+			for n := 0; n < size; n++ {
+				_ = m[getKey(n)]
+			}
 		}
+		name = fmt.Sprintf("map_size_%v__", size)
+		benchmark(b, name, bench)
 	}
 }
 
-func BenchmarkLinearMapGet10(b *testing.B) {
-	b.StopTimer()
-	size := 10
-	m := New[int, struct{}]()
+func BenchmarkPut(b *testing.B) {
+	for _, size := range sizes {
+		lm := newLinearMap(size, getPair)
+		benchLinear := func() {
+			for n := 0; n < size; n++ {
+				lm.Put(getPair(n))
+			}
+		}
+		name := fmt.Sprintf("LinearMap_size_%v__", size)
+		benchmark(b, name, benchLinear)
+
+		m := newMap(size, getPair)
+		bench := func() {
+			for n := 0; n < size; n++ {
+				key, val := getPair(n)
+				m[key] = val
+			}
+		}
+		name = fmt.Sprintf("map_size_%v__", size)
+		benchmark(b, name, bench)
+	}
+}
+
+func BenchmarkRemove(b *testing.B) {
+	for _, size := range sizes {
+		lm := newLinearMap(size, getPair)
+		benchLinear := func() {
+			for n := 0; n < size; n++ {
+				lm.Remove(getKey(n))
+			}
+		}
+		name := fmt.Sprintf("LinearMap_size_%v__", size)
+		benchmark(b, name, benchLinear)
+
+		m := newMap(size, getPair)
+		bench := func() {
+			for n := 0; n < size; n++ {
+				delete(m, getKey(n))
+			}
+		}
+		name = fmt.Sprintf("map_size_%v__", size)
+		benchmark(b, name, bench)
+	}
+}
+
+func newLinearMap[K comparable, T any](size int, getPair func(int) (K, T)) *LinearMap[K, T] {
+	m := New[K, T]()
 	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
+		key, val := getPair(n)
+		m.Put(key, val)
 	}
-	b.StartTimer()
-	benchmarkGet(b, m, size)
+	return m
 }
 
-func BenchmarkLinearMapPut10(b *testing.B) {
-	b.StopTimer()
-	size := 10
-	m := New[int, struct{}]()
-	b.StartTimer()
-	benchmarkPut(b, m, size)
-}
-
-func BenchmarkLinearMapRemove10(b *testing.B) {
-	b.StopTimer()
-	size := 10
-	m := New[int, struct{}]()
+func newMap[K comparable, T any](size int, getPair func(int) (K, T)) map[K]T {
+	m := make(map[K]T)
 	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
+		key, val := getPair(n)
+		m[key] = val
 	}
-	b.StartTimer()
-	benchmarkRemove(b, m, size)
-}
-
-func BenchmarkLinearMapGet20(b *testing.B) {
-	b.StopTimer()
-	size := 20
-	m := New[int, struct{}]()
-	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
-	}
-	b.StartTimer()
-	benchmarkGet(b, m, size)
-}
-
-func BenchmarkLinearMapPut20(b *testing.B) {
-	b.StopTimer()
-	size := 20
-	m := New[int, struct{}]()
-	b.StartTimer()
-	benchmarkPut(b, m, size)
-}
-
-func BenchmarkLinearMapRemove20(b *testing.B) {
-	b.StopTimer()
-	size := 20
-	m := New[int, struct{}]()
-	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
-	}
-	b.StartTimer()
-	benchmarkRemove(b, m, size)
-}
-
-func BenchmarkLinearMapGet30(b *testing.B) {
-	b.StopTimer()
-	size := 30
-	m := New[int, struct{}]()
-	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
-	}
-	b.StartTimer()
-	benchmarkGet(b, m, size)
-}
-
-func BenchmarkLinearMapPut30(b *testing.B) {
-	b.StopTimer()
-	size := 30
-	m := New[int, struct{}]()
-	b.StartTimer()
-	benchmarkPut(b, m, size)
-}
-
-func BenchmarkLinearMapRemove30(b *testing.B) {
-	b.StopTimer()
-	size := 30
-	m := New[int, struct{}]()
-	for n := 0; n < size; n++ {
-		m.Put(n, struct{}{})
-	}
-	b.StartTimer()
-	benchmarkRemove(b, m, size)
+	return m
 }

@@ -29,6 +29,9 @@ func (m *LinearMap[K, T]) FromJSON(data []byte) error {
 	return err
 }
 
+var _ json.Marshaler = &LinearMap[int, int]{}
+var _ json.Unmarshaler = &LinearMap[int, int]{}
+
 // UnmarshalJSON @implements json.Unmarshaler
 func (m *LinearMap[K, T]) UnmarshalJSON(bytes []byte) error {
 	return m.FromJSON(bytes)

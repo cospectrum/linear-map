@@ -46,21 +46,21 @@ Benchmarks are performed on arm64 with Key=int, Value=struct{}.
 The lower is better
 
 Length: 10
-| Method | LinearMap | HashMap |
+| Method | LinearMap | map |
 | ---- | ------------ | ------ |
 | Get | 27 ns/op | 49 ns/op |
 | Put | 30 ns/op | 70 ns/op |
 | Remove | 7 ns/op | 16 ns/op |
 
 Length: 20
-| Method | LinearMap | HashMap |
+| Method | LinearMap | map |
 | ---- | ------------ | ------ |
 | Get | 85 ns/op | 97 ns/op |
 | Put | 92 ns/op | 140 ns/op |
 | Remove | 13 ns/op | 29 ns/op |
 
 Length: 30
-| Method | LinearMap | HashMap |
+| Method | LinearMap | map |
 | ---- | ------------ | ------ |
 | Get | 174 ns/op | 147 ns/op |
 | Put | 184 ns/op | 198 ns/op |

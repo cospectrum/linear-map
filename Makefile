@@ -19,4 +19,8 @@ test:
 bench:
 	go test -bench=. ./...
 
-pre-commit: lint test bench
+ci: lint test bench
+
+pre-commit: lint test
+
+all: ci
