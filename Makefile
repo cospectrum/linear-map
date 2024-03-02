@@ -22,5 +22,3 @@ bench:
 ci: lint test bench
 
 pre-commit: lint test
-
-all: ci

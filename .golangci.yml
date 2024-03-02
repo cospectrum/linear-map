@@ -4,11 +4,107 @@ run:
 
 linters:
   enable:
-    # linter
+    # default
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+
+    # linters
     - revive
+    - gocritic
+    - stylecheck
 
     # fmt
     - gofmt
     - goimports
 
+    # ctx
+    - contextcheck
+    - noctx
+
+    # database/sql
+    - rowserrcheck
+    - sqlclosecheck
+    - execinquery
+
+    # tests
+    - tenv
+    - testableexamples
+    - thelper
+    - tparallel
+
+    # Checks that all code identifiers does not have non-ASCII symbols in the name.
+    - asciicheck
+
+    # Checks whether HTTP response body is closed successfully.
+    - bodyclose
+
+    # Check for two durations multiplied together.
+    - durationcheck
+
+    # Checks that sentinel errors are prefixed with the Err and error types are suffixed with the Error.    
+    - errname
+
+    # Errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
+    - errorlint
+
+    # Checks for pointers to enclosing loop variables.
+    - exportloopref
+
+    # Inspects source code for security problems.
+    - gosec
+
+    # Finds commonly misspelled English words in comments.
+    - misspell
+
+    # Enforce field tags in (un)marshaled structs.
+    - musttag
+
+    # Finds the code that returns nil even if it checks that the error is not nil.
+    - nilerr
+
+    # Finds slice declarations that could potentially be pre-allocated.
+    - prealloc
+
+    # Find code that shadows one of Go's predeclared identifiers.
+    - predeclared
+
+    # Checks that package variables are not reassigned.
+    - reassign
+
+    # Remove unnecessary type conversions.
     - unconvert
+
+    # Reports unused function parameters.
+    - unparam
+
+    # A linter that detect the possibility to use variables/constants from the Go standard library.
+    - usestdlibvars
+
+linters-settings:
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - hugeParam
+
+  errcheck:
+    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
+    # Such cases aren't reported by default.
+    # Default: false
+    check-type-assertions: true
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`.
+    # Such cases aren't reported by default.
+    # Default: false
+    check-blank: true
+
+  gosec:
+    excludes:
+      - G107  # Url provided to HTTP request as taint input

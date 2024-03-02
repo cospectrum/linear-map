@@ -25,7 +25,7 @@ func TestMapPut(t *testing.T) {
 	m.Put(4, "d")
 	m.Put(1, "x")
 	m.Put(2, "b")
-	m.Put(1, "a") //overwrite
+	m.Put(1, "a") // overwrite
 
 	if actualValue := m.Size(); actualValue != 7 {
 		t.Errorf("Got %v expected %v", actualValue, 7)
@@ -67,7 +67,7 @@ func TestMapRemove(t *testing.T) {
 	m.Put(4, "d")
 	m.Put(1, "x")
 	m.Put(2, "b")
-	m.Put(1, "a") //overwrite
+	m.Put(1, "a") // overwrite
 
 	m.Remove(5)
 	m.Remove(6)
@@ -175,7 +175,7 @@ func TestMapString(t *testing.T) {
 	}
 }
 
-func sameElements(a []interface{}, b []interface{}) bool {
+func sameElements(a, b []interface{}) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -195,6 +195,7 @@ func sameElements(a []interface{}, b []interface{}) bool {
 }
 
 func benchmark(b *testing.B, name string, bench func()) {
+	b.Helper()
 	b.Run(name, func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			bench()
@@ -208,8 +209,8 @@ func getKey(n int) int {
 	return n
 }
 
-func getPair(n int) (int, struct{}) {
-	key := getKey(n)
+func getPair(n int) (key int, value struct{}) {
+	key = getKey(n)
 	return key, struct{}{}
 }
 
